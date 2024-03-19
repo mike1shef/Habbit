@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">habbit</string>
+    <string name="main_button_name">Finish Him !</string>
+    <string name="hello_blank_fragment">Отжаться 1000 раз</string>
+    <string name="cheer">Ты такой настойчивый!</string>
+    <string name="students_score">You scored %1$s out of %2$d</string>
+    <string name="add_tasks_to_the_list">Add tasks to the list</string>
+    <string name="calendar">Calendar</string>
+    <string name="home">Home</string>
+    <string name="tasks">Tasks</string>
+    <plurals name="points">
+        <item quantity="one">%d point</item>
+        <item quantity="other">%d points</item>
+    </plurals>
+</resources>

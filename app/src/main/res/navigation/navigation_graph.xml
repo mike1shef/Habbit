@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation_graph"
+    app:startDestination="@id/mainElementFragment">
+
+    <fragment
+        android:id="@+id/mainElementFragment"
+        android:name="com.mshauchenka.habbit.HomeFragment"
+        android:label="fragment_main_screen_element"
+        tools:layout="@layout/fragment_main_screen_element" />
+    <fragment
+        android:id="@+id/tasksFragment"
+        android:name="com.mshauchenka.habbit.TasksFragment"
+        android:label="tasks_fragment"
+        tools:layout="@layout/tasks_fragment" />
+    <fragment
+        android:id="@+id/calendarFragment"
+        android:name="com.mshauchenka.habbit.CalendarFragment"
+        android:label="fragment_calendar"
+        tools:layout="@layout/fragment_calendar" />
+</navigation>
