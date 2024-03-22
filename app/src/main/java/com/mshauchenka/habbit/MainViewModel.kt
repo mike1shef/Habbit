@@ -13,4 +13,17 @@ class MainViewModel (private val dao: TaskDao) : ViewModel() {
             dao.insert(task)
         }
     }
+    fun completeTask (task: Task){
+        viewModelScope.launch {
+            task.completed = !task.completed
+            dao.update(task)
+        }
+    }
+
+    fun removeTask(task: Task) {
+        viewModelScope.launch {
+            dao.remove(task)
+        }
+
+    }
 }

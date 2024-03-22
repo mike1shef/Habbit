@@ -1,21 +1,16 @@
 package com.mshauchenka.habbit
 
-import android.app.Dialog
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.mshauchenka.habbit.databinding.TasksFragmentBinding
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.observeOn
+
 
 
 class TasksFragment : Fragment() {
@@ -32,10 +27,10 @@ class TasksFragment : Fragment() {
        val application = requireNotNull(this.activity).application
         val dao = TaskDataBase.getInstance(application).taskDao
         val viewModelFactory = TasksViewModelFactory(dao)
-        val vm = ViewModelProvider(this, viewModelFactory)
-            .get(MainViewModel::class.java)
+        val vm = ViewModelProvider(this, viewModelFactory)[MainViewModel::class.java]
 
-        val adapter = RecyclerAdapter()
+        val adapter = RecyclerAdapter(vm)
+
         binding.tasksRecyclerView.adapter = adapter
 
         val recyclerView = binding.tasksRecyclerView.apply {
@@ -44,9 +39,7 @@ class TasksFragment : Fragment() {
 
         vm.tasks.observe(viewLifecycleOwner, Observer {
             it?.let {
-                recyclerView.adapter.apply {
-                    adapter.data = it
-                }
+                adapter.submitList(it)
             }
         })
 
@@ -58,7 +51,7 @@ class TasksFragment : Fragment() {
     }
 
     override fun onDestroyView() {
-        _binding = null
         super.onDestroyView()
+        _binding = null
     }
 }
