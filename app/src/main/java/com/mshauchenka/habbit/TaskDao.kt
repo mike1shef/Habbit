@@ -23,6 +23,9 @@ interface TaskDao {
     @Query("SELECT * FROM task_table WHERE taskID = :taskId")
     fun get (taskId: Long) : LiveData<Task>
 
+    @Query("SELECT * FROM task_table WHERE task_completed = 0")
+    fun getUncompleted () : LiveData<List<Task>>
+
     @Query("SELECT * FROM task_table ORDER BY taskID DESC")
     fun getAll () : LiveData<List<Task>>
 }

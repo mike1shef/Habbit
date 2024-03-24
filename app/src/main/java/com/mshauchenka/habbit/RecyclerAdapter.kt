@@ -1,18 +1,14 @@
 package com.mshauchenka.habbit
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.ImageButton
 import android.widget.TextView
-import android.widget.Toast
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import kotlin.coroutines.coroutineContext
 
 class RecyclerAdapter (private val vm : MainViewModel)
     : ListAdapter <Task, RecyclerAdapter.TasksViewHolder>(TaskDiffUtilCallback()) {
@@ -32,9 +28,12 @@ class RecyclerAdapter (private val vm : MainViewModel)
             holder.taskCheckbox.setOnClickListener {
                 val item = getItem(holder.adapterPosition)
                 if (holder.adapterPosition != RecyclerView.NO_POSITION) {
-                    vm.completeTask(item)
+                    if (item.completed){
+                        vm.uncompleteTask(item)
+                    } else vm.completeTask(item)
                 }
             }
+
         return holder
     }
 

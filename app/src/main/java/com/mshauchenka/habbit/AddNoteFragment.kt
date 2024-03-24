@@ -5,13 +5,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.viewModels
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.get
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.mshauchenka.habbit.databinding.FragmentAddNoteBinding
-import com.mshauchenka.habbit.databinding.TasksFragmentBinding
 
 class AddNoteFragment : Fragment() {
     private var _binding : FragmentAddNoteBinding? = null
@@ -31,13 +28,18 @@ class AddNoteFragment : Fragment() {
             .get(MainViewModel::class.java)
 
         binding.close.setOnClickListener {
-            findNavController().navigate(R.id.tasksFragment)
+            findNavController().navigate(R.id.action_addNoteFragment_to_mainElementFragment)
         }
 
         binding.saveButton.setOnClickListener {
-            text = binding.editNote.editText!!.text.toString()
-            vm.addTask(text)
-            findNavController().navigate(R.id.tasksFragment)
+            val textFieldText = binding.editNote.editText?.text
+            if (textFieldText.isNullOrBlank()){
+                Toast.makeText(context, "Enter a note", Toast.LENGTH_SHORT).show()
+            } else {
+                text = binding.editNote.editText!!.text.toString()
+                vm.addTask(text)
+                findNavController().navigate(R.id.mainElementFragment)
+            }
         }
 
 

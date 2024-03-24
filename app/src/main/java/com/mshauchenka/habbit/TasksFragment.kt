@@ -43,10 +43,6 @@ class TasksFragment : Fragment() {
             }
         })
 
-        binding.floatingActionButton.setOnClickListener {
-            findNavController().navigate(R.id.action_tasksFragment_to_addNoteFragment)
-        }
-
         return view
     }
 

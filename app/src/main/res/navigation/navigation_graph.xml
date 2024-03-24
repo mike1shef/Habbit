@@ -9,16 +9,19 @@
         android:id="@+id/mainElementFragment"
         android:name="com.mshauchenka.habbit.HomeFragment"
         android:label="fragment_main_screen_element"
-        tools:layout="@layout/fragment_main_screen_element" />
+        tools:layout="@layout/fragment_main_screen_element" >
+        <action
+            android:id="@+id/action_mainElementFragment_to_addNoteFragment"
+            app:destination="@id/addNoteFragment" />
+        <action
+            android:id="@+id/action_mainElementFragment_to_taskCompletedFragment"
+            app:destination="@id/taskCompletedFragment" />
+    </fragment>
     <fragment
         android:id="@+id/tasksFragment"
         android:name="com.mshauchenka.habbit.TasksFragment"
         android:label="tasks_fragment"
-        tools:layout="@layout/tasks_fragment" >
-        <action
-            android:id="@+id/action_tasksFragment_to_addNoteFragment"
-            app:destination="@id/addNoteFragment" />
-    </fragment>
+        tools:layout="@layout/tasks_fragment" />
     <fragment
         android:id="@+id/calendarFragment"
         android:name="com.mshauchenka.habbit.CalendarFragment"
@@ -28,5 +31,14 @@
         android:id="@+id/addNoteFragment"
         android:name="com.mshauchenka.habbit.AddNoteFragment"
         android:label="fragment_add_note"
-        tools:layout="@layout/fragment_add_note" />
+        tools:layout="@layout/fragment_add_note" >
+        <action
+            android:id="@+id/action_addNoteFragment_to_mainElementFragment"
+            app:destination="@id/mainElementFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/taskCompletedFragment"
+        android:name="com.mshauchenka.habbit.TaskCompletedFragment"
+        android:label="fragment_task_completed"
+        tools:layout="@layout/fragment_task_completed" />
 </navigation>

@@ -8,6 +8,7 @@
     <string name="calendar">Calendar</string>
     <string name="home">Home</string>
     <string name="tasks">Tasks</string>
+    <string name="you_are_doing_grate_see_you_tomorrow">You are doing grate, see you tomorrow</string>
     <plurals name="points">
         <item quantity="one">%d point</item>
         <item quantity="other">%d points</item>
