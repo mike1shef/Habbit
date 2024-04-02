@@ -2,15 +2,18 @@ package com.mshauchenka.habbit
 
 import android.content.Intent
 import android.net.Uri
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import kotlin.random.Random
 
 class MainViewModel (private val dao: TaskDao) : ViewModel() {
+    private val _appState : MutableStateFlow<AppState> = MutableStateFlow(AppState.Start)
+    val appState : StateFlow<AppState> get() = _appState
+
+
     val tasks = dao.getAll()
     val currentTask : MutableLiveData<Task> by lazy {
         MutableLiveData<Task>()
@@ -56,11 +59,10 @@ class MainViewModel (private val dao: TaskDao) : ViewModel() {
             dao.update(task)
         }
     }
+}
 
-    sealed class APP_STATUSES{
-        object START
-        object FINISH_TASK
-        object TASK_FINISHED
-
-    }
+sealed class AppState {
+    object Start : AppState()
+    object TaskSelected: AppState()
+    object TaskFinished: AppState()
 }

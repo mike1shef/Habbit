@@ -1,5 +1,6 @@
 package com.mshauchenka.habbit
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -8,14 +9,13 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.mshauchenka.habbit.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding : ActivityMainBinding
+    private lateinit var vm : MainViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,12 +27,23 @@ class MainActivity : AppCompatActivity() {
         val application = requireNotNull(this).application
         val dao = TaskDataBase.getInstance(application).taskDao
         val viewModelFactory = TasksViewModelFactory(dao)
-        val vm = ViewModelProvider(this, viewModelFactory)[MainViewModel::class.java]
+        vm = ViewModelProvider(this, viewModelFactory)[MainViewModel::class.java]
 
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         val navController = navHostFragment.navController
 
+        when{
+            intent?.action == Intent.ACTION_SEND -> {
 
+                try {
+                    handleSendUrl(intent)
+                    Toast.makeText(this, "Memo added", Toast.LENGTH_SHORT).show()
+                } catch (e: Exception) {
+                    Toast.makeText(this, "Cannot memo be added", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+        }
 
         binding.bottomNav.setupWithNavController(navController)
 
@@ -52,6 +63,14 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+    }
+
+    private fun handleSendUrl(intent: Intent) {
+        intent.getStringExtra(Intent.EXTRA_TEXT)?.let {
+            vm.addTask(it)
+
+        }
+
     }
 
 
