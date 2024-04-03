@@ -5,9 +5,9 @@
     <string name="cheer">Ты такой настойчивый!</string>
     <string name="students_score">You scored %1$s out of %2$d</string>
     <string name="add_tasks_to_the_list">Add tasks to the list</string>
-    <string name="calendar">Calendar</string>
-    <string name="home">Home</string>
-    <string name="tasks">Tasks</string>
+    <string name="calendar">calendar</string>
+    <string name="home">home</string>
+    <string name="tasks">tasks</string>
     <string name="you_are_doing_grate_see_you_tomorrow">You are doing grate, see you tomorrow</string>
     <plurals name="points">
         <item quantity="one">%d point</item>

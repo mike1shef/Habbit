@@ -11,6 +11,8 @@ data class Task (
     @ColumnInfo(name = "task_name")
     val title : String,
     @ColumnInfo(name = "task_completed")
-    var completed : Boolean = false
+    var completed : Boolean = false,
+    @ColumnInfo(name = "task_current")
+    var currentTask : Boolean = false
 )
 

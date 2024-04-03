@@ -12,6 +12,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.mshauchenka.habbit.databinding.FragmentMainScreenElementBinding
 
 class HomeFragment : Fragment() {
@@ -35,14 +36,13 @@ class HomeFragment : Fragment() {
 
         binding.mainCardPostponeButton.setOnClickListener {
             binding.card.visibility = View.GONE
-            vm.selectRandomTask()
         }
 
         binding.card.setOnClickListener {
             if (vm.currentTask.value != null) {
                 startActivity(vm.openCardInBrowser())
             } else {
-                Toast.makeText(context, "Current track: ${vm.currentTask.value}", Toast.LENGTH_SHORT).show()}
+                Toast.makeText(context, "Current task: ${vm.currentTask.value}", Toast.LENGTH_SHORT).show()}
         }
 
 
@@ -60,8 +60,9 @@ class HomeFragment : Fragment() {
 
 
         binding.mainCardMixButton.setOnClickListener {
-            vm.selectRandomTask()
+            vm.mixCurrentTask()
         }
+
 
         return view
     }

@@ -29,6 +29,7 @@ class TasksFragment : Fragment() {
         val viewModelFactory = TasksViewModelFactory(dao)
         val vm = ViewModelProvider(this, viewModelFactory)[MainViewModel::class.java]
 
+
         val adapter = RecyclerAdapter(vm)
 
         binding.tasksRecyclerView.adapter = adapter

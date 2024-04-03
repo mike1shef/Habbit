@@ -29,7 +29,7 @@ class RecyclerAdapter (private val vm : MainViewModel)
                 val item = getItem(holder.adapterPosition)
                 if (holder.adapterPosition != RecyclerView.NO_POSITION) {
                     if (item.completed){
-                        vm.uncompleteTask(item)
+                        vm.unCompleteTask(item)
                     } else vm.completeTask(item)
                 }
             }

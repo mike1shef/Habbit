@@ -53,7 +53,7 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(this, "You need to add data first", Toast.LENGTH_LONG).show()
                 navHostFragment.navController.navigate(R.id.action_mainElementFragment_to_addNoteFragment)
             } else if (it.isNotEmpty() && vm.currentTask.value == null) {
-                vm.selectRandomTask()
+                vm.getCurrentTask()
             }
         })
 

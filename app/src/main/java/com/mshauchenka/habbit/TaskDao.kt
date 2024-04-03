@@ -28,4 +28,6 @@ interface TaskDao {
 
     @Query("SELECT * FROM task_table ORDER BY taskID DESC")
     fun getAll () : LiveData<List<Task>>
+    @Query("SELECT * FROM task_table WHERE task_current = 1")
+    fun getCurrentTask () : LiveData<Task>
 }
