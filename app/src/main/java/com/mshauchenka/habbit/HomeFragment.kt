@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.mshauchenka.habbit.databinding.FragmentMainScreenElementBinding
@@ -21,7 +22,7 @@ class HomeFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentMainScreenElementBinding.inflate(inflater, container, false)
         val view = binding.root
         val vm = ViewModelProvider(requireActivity())[MainViewModel::class.java]
@@ -81,8 +82,12 @@ class HomeFragment : Fragment() {
                 val position = viewHolder.adapterPosition
                 if (position != RecyclerView.NO_POSITION) {
                     vm.tasks.value?.get(position)?.let { vm.removeTask(it) }
+                    recyclerView.adapter?.notifyItemRemoved(position)
                 }
             }
+        }
+        ItemTouchHelper(callback).apply {
+            attachToRecyclerView(recyclerView)
         }
 
         return view
