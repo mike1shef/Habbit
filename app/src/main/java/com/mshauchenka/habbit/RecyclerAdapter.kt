@@ -4,7 +4,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
-import android.widget.ImageButton
 import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -16,14 +15,6 @@ class RecyclerAdapter (private val vm : MainViewModel)
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TasksViewHolder {
         val holder = TasksViewHolder(LayoutInflater.from(parent.context)
                 .inflate(R.layout.item_task, parent, false))
-
-
-            holder.removeButton.setOnClickListener {
-                val item = getItem(holder.adapterPosition)
-                if (holder.adapterPosition != RecyclerView.NO_POSITION) {
-                    vm.removeTask(item)
-                }
-            }
 
             holder.taskCheckbox.setOnClickListener {
                 val item = getItem(holder.adapterPosition)
@@ -48,7 +39,6 @@ class RecyclerAdapter (private val vm : MainViewModel)
     class TasksViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val taskText = view.findViewById<TextView>(R.id.item_task_text)
         val taskCheckbox = view.findViewById<CheckBox>(R.id.item_task_checkbox)
-        val removeButton = view.findViewById<ImageButton>(R.id.item_task_remove_button)
     }
 }
 class TaskDiffUtilCallback : DiffUtil.ItemCallback<Task>(){

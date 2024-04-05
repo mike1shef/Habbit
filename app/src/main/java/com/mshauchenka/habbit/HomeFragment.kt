@@ -1,18 +1,17 @@
 package com.mshauchenka.habbit
 
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.mshauchenka.habbit.databinding.FragmentMainScreenElementBinding
 
 class HomeFragment : Fragment() {
@@ -23,10 +22,12 @@ class HomeFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentMainScreenElementBinding.inflate(inflater, container, false)
         val view = binding.root
         val vm = ViewModelProvider(requireActivity())[MainViewModel::class.java]
+        val adapter = RecyclerAdapter(vm)
+        binding.tasksRecyclerView.adapter = adapter
 
         vm.currentTask.observe(viewLifecycleOwner, Observer {task ->
             task?.let {
@@ -63,6 +64,31 @@ class HomeFragment : Fragment() {
             vm.mixCurrentTask()
         }
 
+        val recyclerView = binding.tasksRecyclerView.apply {
+            layoutManager = LinearLayoutManager(context)
+        }
+
+        vm.tasks.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                adapter.submitList(it)
+                if (it.filter { !it.currentTask && !it.completed }.isEmpty()){
+                    binding.mainCardMixButton.visibility = View.INVISIBLE
+                }
+            }
+        })
+
+        val callback = object :SwipeToRemove() {
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val position = viewHolder.adapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    vm.tasks.value?.get(position)?.let { vm.removeTask(it) }
+                    recyclerView.adapter?.notifyItemRemoved(position)
+                }
+            }
+        }
+        ItemTouchHelper(callback).apply {
+            attachToRecyclerView(recyclerView)
+        }
 
         return view
     }
