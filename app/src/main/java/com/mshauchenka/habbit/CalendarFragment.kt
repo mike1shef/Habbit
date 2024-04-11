@@ -6,12 +6,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CalendarView
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mshauchenka.habbit.databinding.FragmentCalendarBinding
 import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import java.util.Calendar
 
 class CalendarFragment : Fragment() {
@@ -27,17 +27,23 @@ class CalendarFragment : Fragment() {
         val view = binding.root
         vm = ViewModelProvider(requireActivity())[MainViewModel::class.java]
         val adapter = RecyclerAdapter(vm)
-        binding.calendarRecyclerView.adapter = adapter
-        val recyclerView = binding.calendarRecyclerView.apply {
+
+        val dateFormatter = DateTimeFormatter.ofPattern("dd.MM")
+
+        binding.calendarRecyclerView.apply {
             layoutManager = LinearLayoutManager(context)
+            this.adapter = adapter
         }
 
         val calendar = Calendar.getInstance().apply {
             this.set(LocalDate.now().year, LocalDate.now().monthValue, LocalDate.now().dayOfMonth)
         }
 
-        vm.date.observe(viewLifecycleOwner, Observer {
-            vm.getTasksByDate(it).observe(viewLifecycleOwner, Observer {
+        vm.date.observe(viewLifecycleOwner, Observer { date ->
+            val text = String.format(resources.getString(R.string.formatted_day), date.format(dateFormatter))
+            binding.calendarText.text = text
+
+            vm.getTasksByDate(date).observe(viewLifecycleOwner, Observer {
                 it?.let {
                     adapter.submitList(it)
                 }
