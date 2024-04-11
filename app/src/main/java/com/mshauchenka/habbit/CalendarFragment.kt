@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CalendarView
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -34,19 +35,18 @@ class CalendarFragment : Fragment() {
         val calendar = Calendar.getInstance().apply {
             this.set(LocalDate.now().year, LocalDate.now().monthValue, LocalDate.now().dayOfMonth)
         }
-        vm.getTasksByDate(LocalDate.now()).observe(viewLifecycleOwner, Observer {
-            it?.let {
-                adapter.submitList(it)
-            }
-        })
 
-        binding.calendarView.setOnDateChangeListener(CalendarView.OnDateChangeListener { view, year, month, dayOfMonth ->
-            val date = LocalDate.of(year, month +1, dayOfMonth)
-            vm.getTasksByDate(date).observe(viewLifecycleOwner, Observer {
+        vm.date.observe(viewLifecycleOwner, Observer {
+            vm.getTasksByDate(it).observe(viewLifecycleOwner, Observer {
                 it?.let {
                     adapter.submitList(it)
                 }
             })
+        })
+
+        binding.calendarView.setOnDateChangeListener(CalendarView.OnDateChangeListener { view, year, month, dayOfMonth ->
+            val newDate = LocalDate.of(year, month +1, dayOfMonth)
+            vm.date.value = newDate
         })
 
         return view

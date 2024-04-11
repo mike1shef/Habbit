@@ -18,6 +18,10 @@ class MainViewModel (private val dao: TaskDao) : ViewModel() {
         MutableLiveData<Task>()
     }
 
+    val date : MutableLiveData<LocalDate> by lazy {
+        MutableLiveData<LocalDate>(LocalDate.now())
+    }
+
     fun getCurrentTask() {
         if (!tasks.value.isNullOrEmpty()){
             currentTask.value = tasks.value?.firstOrNull { it.currentTask }
