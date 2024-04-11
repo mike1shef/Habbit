@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.mshauchenka.habbit.databinding.FragmentMainScreenElementBinding
 
 class HomeFragment : Fragment() {
+    private lateinit var vm : MainViewModel
     private var _binding : FragmentMainScreenElementBinding? = null
     private val binding get() = _binding!!
 
@@ -25,15 +26,19 @@ class HomeFragment : Fragment() {
     ): View {
         _binding = FragmentMainScreenElementBinding.inflate(inflater, container, false)
         val view = binding.root
-        val vm = ViewModelProvider(requireActivity())[MainViewModel::class.java]
+        vm = ViewModelProvider(requireActivity())[MainViewModel::class.java]
         val adapter = RecyclerAdapter(vm)
         binding.tasksRecyclerView.adapter = adapter
 
         vm.currentTask.observe(viewLifecycleOwner, Observer {task ->
-            task?.let {
-                binding.body.text = it.title
-            }
+            if (task == null){
+                binding.card.visibility = View.GONE
+            } else { binding.body.text = task.title }
         })
+
+        val recyclerView = binding.tasksRecyclerView.apply {
+            layoutManager = LinearLayoutManager(context)
+        }
 
         binding.mainCardPostponeButton.setOnClickListener {
             binding.card.visibility = View.GONE
@@ -49,23 +54,25 @@ class HomeFragment : Fragment() {
 
         binding.mainCardFinishButton.setOnClickListener {
             if (vm.currentTask.value != null) {
+                val position = vm.tasks.value?.indexOf(vm.currentTask.value)
+
                 vm.completeCurrentTask()
-                findNavController().navigate(R.id.action_mainElementFragment_to_taskCompletedFragment)
+                recyclerView.adapter?.notifyItemChanged(position!!)
+
             } else {
-                Toast.makeText(context, "Current track: ${vm.currentTask.value}", Toast.LENGTH_SHORT).show()}
+                binding.card.visibility = View.GONE
+                Toast.makeText(context, "Current task: ${vm.currentTask.value}", Toast.LENGTH_SHORT).show()}
         }
 
         binding.floatingActionButton.setOnClickListener {
-            findNavController().navigate(R.id.action_mainElementFragment_to_addNoteFragment)
+            //findNavController().navigate(R.id.action_mainElementFragment_to_addNoteFragment)
+
+            vm.addTask("Tested task")
         }
 
 
         binding.mainCardMixButton.setOnClickListener {
             vm.mixCurrentTask()
-        }
-
-        val recyclerView = binding.tasksRecyclerView.apply {
-            layoutManager = LinearLayoutManager(context)
         }
 
         vm.tasks.observe(viewLifecycleOwner, Observer {
@@ -91,6 +98,13 @@ class HomeFragment : Fragment() {
         }
 
         return view
+    }
+
+    override fun onResume() {
+        vm = ViewModelProvider(requireActivity())[MainViewModel::class.java]
+        vm.getCurrentTask()
+
+        super.onResume()
     }
 
     override fun onDestroyView() {

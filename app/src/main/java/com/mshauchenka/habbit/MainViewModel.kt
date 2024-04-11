@@ -2,19 +2,18 @@ package com.mshauchenka.habbit
 
 import android.content.Intent
 import android.net.Uri
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 
 class MainViewModel (private val dao: TaskDao) : ViewModel() {
 //    private val _appState : MutableStateFlow<AppState> = MutableStateFlow(AppState.Start)
 //    val appState : StateFlow<AppState> get() = _appState
-
-
     val tasks = dao.getAll()
+    val tasksCompleted = dao.getCompletedTasks()
     val currentTask : MutableLiveData<Task> by lazy {
         MutableLiveData<Task>()
     }
@@ -23,15 +22,16 @@ class MainViewModel (private val dao: TaskDao) : ViewModel() {
         if (!tasks.value.isNullOrEmpty()){
             currentTask.value = tasks.value?.firstOrNull { it.currentTask }
             if (currentTask.value == null){
-                currentTask.value = selectRandomTask()
-                updateCurrentTask(currentTask.value!!)
+                if (tasks.value!!.any { !it.completed }) {
+                    currentTask.value = selectRandomTask()
+                    updateCurrentTask(currentTask.value!!)
+                }
             }
         }
     }
 
-    fun selectRandomTask() : Task {
-        val uncompletedTasks = tasks.value?.filter { !it.completed && !it.currentTask }
-        return uncompletedTasks!!.random()
+    private fun selectRandomTask() : Task {
+        return tasks.value?.filter{ !it.completed && !it.currentTask  }!!.random()
     }
 
     fun mixCurrentTask(){
@@ -45,11 +45,13 @@ class MainViewModel (private val dao: TaskDao) : ViewModel() {
         viewModelScope.launch {
             val task = Task(title = taskTitle)
             dao.insert(task)
+            getCurrentTask()
         }
     }
     fun completeTask (task: Task){
         viewModelScope.launch {
             task.completed = true
+            task.dateCompleted = LocalDate.now().toString()
             if (task.currentTask){
                 task.currentTask = false
                 getCurrentTask()
@@ -91,6 +93,10 @@ class MainViewModel (private val dao: TaskDao) : ViewModel() {
             } else task.currentTask = true
             dao.update(task)
         }
+    }
+
+    fun getTasksByDate (date : LocalDate) : LiveData<List<Task>> {
+        return dao.getTasksByDate(date.toString())
     }
 }
 
