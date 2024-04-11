@@ -5,14 +5,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.CalendarView
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mshauchenka.habbit.databinding.FragmentCalendarBinding
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
-import java.util.Calendar
 
 class CalendarFragment : Fragment() {
     private var _binding : FragmentCalendarBinding? = null
@@ -35,25 +32,23 @@ class CalendarFragment : Fragment() {
             this.adapter = adapter
         }
 
-        val calendar = Calendar.getInstance().apply {
-            this.set(LocalDate.now().year, LocalDate.now().monthValue, LocalDate.now().dayOfMonth)
-        }
-
-        vm.date.observe(viewLifecycleOwner, Observer { date ->
-            val text = String.format(resources.getString(R.string.formatted_day), date.format(dateFormatter))
+        vm.date.observe(viewLifecycleOwner) { date ->
+            val text = String.format(
+                resources.getString(R.string.formatted_day),
+                date.format(dateFormatter)
+            )
             binding.calendarText.text = text
 
-            vm.getTasksByDate(date).observe(viewLifecycleOwner, Observer {
+            vm.getTasksByDate(date).observe(viewLifecycleOwner) {
                 it?.let {
                     adapter.submitList(it)
                 }
-            })
-        })
+            }
+        }
 
-        binding.calendarView.setOnDateChangeListener(CalendarView.OnDateChangeListener { view, year, month, dayOfMonth ->
-            val newDate = LocalDate.of(year, month +1, dayOfMonth)
-            vm.date.value = newDate
-        })
+        binding.calendarView.setOnDateChangeListener { view, year, month, dayOfMonth ->
+            vm.date.value = LocalDate.of(year, month + 1, dayOfMonth)
+        }
 
         return view
 
@@ -61,6 +56,7 @@ class CalendarFragment : Fragment() {
 
     override fun onDestroyView() {
         _binding = null
+        vm.date.value = LocalDate.now()
         super.onDestroyView()
     }
 }
