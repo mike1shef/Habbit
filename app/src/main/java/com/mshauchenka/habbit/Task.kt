@@ -12,6 +12,8 @@ data class Task (
     val title : String,
     @ColumnInfo(name = "task_completed")
     var completed : Boolean = false,
+    @ColumnInfo(name = "task_completed_date")
+    var dateCompleted : String? = null,
     @ColumnInfo(name = "task_current")
     var currentTask : Boolean = false
 )
