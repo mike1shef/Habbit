@@ -10,6 +10,9 @@
     <string name="home">home</string>
     <string name="tasks">tasks</string>
     <string name="you_are_doing_grate_see_you_tomorrow">You are doing grate, see you tomorrow</string>
+    <string name="new_task">New task</string>
+    <string name="enter_your_link_here_text">Enter your link here</string>
+    <string name="save_button_text">Save</string>
     <plurals name="points">
         <item quantity="one">%d point</item>
         <item quantity="other">%d points</item>

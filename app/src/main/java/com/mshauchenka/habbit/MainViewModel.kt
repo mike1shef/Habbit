@@ -10,10 +10,8 @@ import kotlinx.coroutines.launch
 import java.time.LocalDate
 
 class MainViewModel (private val dao: TaskDao) : ViewModel() {
-//    private val _appState : MutableStateFlow<AppState> = MutableStateFlow(AppState.Start)
-//    val appState : StateFlow<AppState> get() = _appState
+
     val tasks = dao.getAll()
-    val tasksCompleted = dao.getCompletedTasks()
     val currentTask : MutableLiveData<Task> by lazy {
         MutableLiveData<Task>()
     }
@@ -90,7 +88,7 @@ class MainViewModel (private val dao: TaskDao) : ViewModel() {
             dao.update(task)
         }
     }
-    fun updateCurrentTask(task: Task) {
+    private fun updateCurrentTask(task: Task) {
         viewModelScope.launch {
             if (task.currentTask){
                 task.currentTask = false
@@ -103,9 +101,3 @@ class MainViewModel (private val dao: TaskDao) : ViewModel() {
         return dao.getTasksByDate(date.toString())
     }
 }
-
-//sealed class AppState {
-//    object Start : AppState()
-//    object TaskSelected: AppState()
-//    object TaskFinished: AppState()
-//}

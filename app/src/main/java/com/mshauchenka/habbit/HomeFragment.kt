@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -65,9 +64,7 @@ class HomeFragment : Fragment() {
         }
 
         binding.floatingActionButton.setOnClickListener {
-            //findNavController().navigate(R.id.action_mainElementFragment_to_addNoteFragment)
-
-            vm.addTask("Tested task")
+            AddNoteFragment().show(this.parentFragmentManager, "Tag")
         }
 
 
