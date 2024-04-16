@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/mainElementFragment"
         android:name="com.mshauchenka.habbit.HomeFragment"
-        android:label="fragment_main_screen_element"
+        android:label="Habit"
         tools:layout="@layout/fragment_main_screen_element" >
         <action
             android:id="@+id/action_mainElementFragment_to_addNoteFragment"
@@ -20,17 +20,17 @@
     <fragment
         android:id="@+id/tasksFragment"
         android:name="com.mshauchenka.habbit.TasksFragment"
-        android:label="tasks_fragment"
+        android:label="Tasks"
         tools:layout="@layout/tasks_fragment" />
     <fragment
         android:id="@+id/calendarFragment"
         android:name="com.mshauchenka.habbit.CalendarFragment"
-        android:label="fragment_calendar"
+        android:label="Calendar"
         tools:layout="@layout/fragment_calendar" />
     <fragment
         android:id="@+id/addNoteFragment"
         android:name="com.mshauchenka.habbit.AddNoteFragment"
-        android:label="fragment_add_note"
+        android:label="Add task"
         tools:layout="@layout/fragment_add_note" >
         <action
             android:id="@+id/action_addNoteFragment_to_mainElementFragment"
@@ -39,6 +39,6 @@
     <fragment
         android:id="@+id/taskCompletedFragment"
         android:name="com.mshauchenka.habbit.TaskCompletedFragment"
-        android:label="fragment_task_completed"
+        android:label="Task completed"
         tools:layout="@layout/fragment_task_completed" />
 </navigation>

@@ -10,6 +10,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.mshauchenka.habbit.databinding.ActivityMainBinding
 
@@ -23,6 +24,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
+        setSupportActionBar(binding.appToolbar)
 
         val application = requireNotNull(this).application
         val dao = TaskDataBase.getInstance(application).taskDao
@@ -30,8 +32,12 @@ class MainActivity : AppCompatActivity() {
         vm = ViewModelProvider(this, viewModelFactory)[MainViewModel::class.java]
         vm.getMinimalDate()
 
-        val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        val navHostFragment = supportFragmentManager
+            .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         val navController = navHostFragment.navController
+        val builder = AppBarConfiguration.Builder(navController.graph)
+        val appBarConfiguration = builder.build()
+        binding.appToolbar.setupWithNavController(navController, appBarConfiguration)
 
         when{
             intent?.action == Intent.ACTION_SEND -> {

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">habbit</string>
+    <string name="app_name">Habit</string>
     <string name="main_button_name">Finish Him !</string>
     <string name="hello_blank_fragment">Отжаться 1000 раз</string>
     <string name="cheer">Ты такой настойчивый!</string>
