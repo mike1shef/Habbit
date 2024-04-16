@@ -1,10 +1,13 @@
 package com.mshauchenka.habbit
 
+import android.icu.util.Calendar
+import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mshauchenka.habbit.databinding.FragmentCalendarBinding
@@ -16,6 +19,7 @@ class CalendarFragment : Fragment() {
     private val binding get() = _binding!!
     private lateinit var vm : MainViewModel
 
+    @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -26,6 +30,23 @@ class CalendarFragment : Fragment() {
         val adapter = RecyclerAdapter(vm)
 
         val dateFormatter = DateTimeFormatter.ofPattern("dd.MM")
+        val firstCompletedTaskDate = vm.minimalDate
+        val calendar : Calendar = Calendar.getInstance()
+
+
+
+        binding.calendarView.maxDate = calendar.timeInMillis
+        if (firstCompletedTaskDate !== null){
+        calendar.set(
+                firstCompletedTaskDate.year,
+                firstCompletedTaskDate.monthValue-1,
+                firstCompletedTaskDate.dayOfMonth
+        )
+        } else {
+            val localDate = LocalDate.now()
+            calendar.set(localDate.year, localDate.monthValue-1, localDate.dayOfMonth)}
+
+        binding.calendarView.minDate = calendar.timeInMillis
 
         binding.calendarRecyclerView.apply {
             layoutManager = LinearLayoutManager(context)
@@ -51,7 +72,6 @@ class CalendarFragment : Fragment() {
         }
 
         return view
-
     }
 
     override fun onDestroyView() {

@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 
@@ -14,6 +15,19 @@ class MainViewModel (private val dao: TaskDao) : ViewModel() {
     val tasks = dao.getAll()
     val currentTask : MutableLiveData<Task> by lazy {
         MutableLiveData<Task>()
+    }
+
+    var minimalDate: LocalDate? = null
+
+
+    fun getMinimalDate ()  {
+        viewModelScope.launch {
+            val job1 = async { dao.getFirstDate() }
+            val text = job1.await()
+            if (!text.isNullOrEmpty()){
+                minimalDate = LocalDate.parse(text)
+            }
+        }
     }
 
     val date : MutableLiveData<LocalDate> by lazy {

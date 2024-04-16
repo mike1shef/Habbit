@@ -34,4 +34,8 @@ interface TaskDao {
 
     @Query("SELECT * FROM task_table WHERE task_completed_date = :date")
     fun getTasksByDate (date: String) : LiveData<List<Task>>
+
+
+    @Query("SELECT task_completed_date FROM task_table WHERE task_completed_date IS NOT NULL ORDER BY task_completed_date ASC limit 1")
+    suspend fun getFirstDate () : String?
 }

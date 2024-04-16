@@ -10,8 +10,8 @@
     <CalendarView
         android:id="@+id/calendarView"
         android:layout_width="match_parent"
-        android:layout_gravity="top|center"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|center"/>
 
     <TextView
         android:id="@+id/calendar_text"

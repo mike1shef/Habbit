@@ -28,6 +28,7 @@ class MainActivity : AppCompatActivity() {
         val dao = TaskDataBase.getInstance(application).taskDao
         val viewModelFactory = TasksViewModelFactory(dao)
         vm = ViewModelProvider(this, viewModelFactory)[MainViewModel::class.java]
+        vm.getMinimalDate()
 
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         val navController = navHostFragment.navController
@@ -37,7 +38,6 @@ class MainActivity : AppCompatActivity() {
 
                 try {
                     handleSendUrl(intent)
-                    Toast.makeText(this, "Memo added", Toast.LENGTH_SHORT).show()
                 } catch (e: Exception) {
                     Toast.makeText(this, "Cannot memo be added", Toast.LENGTH_SHORT).show()
                 }
@@ -51,7 +51,8 @@ class MainActivity : AppCompatActivity() {
         vm.tasks.observe(this, Observer {
             if (it.isNullOrEmpty()){
                 Toast.makeText(this, "You need to add data first", Toast.LENGTH_LONG).show()
-                navHostFragment.navController.navigate(R.id.action_mainElementFragment_to_addNoteFragment)
+                AddNoteFragment().show(this.supportFragmentManager, "Show fragment")
+
             } else if (it.isNotEmpty() && vm.currentTask.value == null) {
                 vm.getCurrentTask()
             }
