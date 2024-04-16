@@ -34,6 +34,7 @@ class AddNoteFragment : BottomSheetDialogFragment() {
             } else {
                 val text = binding.editNote.editText!!.text.toString()
                 vm.addTask(text)
+                Toast.makeText(context, "Task added", Toast.LENGTH_SHORT).show()
                 this.dismiss()
             }
         }
